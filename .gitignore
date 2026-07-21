@@ -1,0 +1,18 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Dependencies (if added later)
+node_modules/
+vendor/
+
+# Build artifacts
+*.zip
+
+# Logs
+*.log
