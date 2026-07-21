@@ -47,6 +47,12 @@ Restricted to logged-in users with the `manage_options` capability.
 
 ## Changelog
 
+### 1.1.1
+- Fixed a false-positive "Tickera not active" admin notice caused by a hook
+  timing bug: the dependency check ran on `plugins_loaded`, before Tickera
+  registers its `tc_events` / `tc_tickets` post types on `init`. The check
+  now runs on `init` (priority 20) instead, after those post types exist.
+
 ### 1.1.0
 - Added chunked AJAX batch processing (default batch size: 20) with a live
   progress bar, replacing the single long-running form submission

@@ -3,7 +3,7 @@
  * Plugin Name:       CIA Ticket Generator
  * Plugin URI:        https://crossexamined.org/
  * Description:       Admin-only tool to bulk-generate Tickera orders/tickets for approved CIA applicants, with a searchable multi-select list and chunked batch processing. Shortcode: [cia_ticket_generator]
- * Version:           1.1.0
+ * Version:           1.1.1
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            CrossExamined.org
@@ -41,8 +41,13 @@ define('CE_PLUGIN', true);
 /**
  * Bail out gracefully (with an admin notice) if Tickera isn't active,
  * rather than fatal-erroring on missing post types / functions.
+ *
+ * NOTE: This runs on `init` at a low priority (20), not `plugins_loaded`.
+ * Custom post types like Tickera's `tc_events` / `tc_tickets` are normally
+ * registered on `init`, which fires AFTER `plugins_loaded` - checking on
+ * `plugins_loaded` would always report Tickera as missing, even when active.
  */
-add_action('plugins_loaded', 'cia_ticket_generator_check_dependencies');
+add_action('init', 'cia_ticket_generator_check_dependencies', 20);
 function cia_ticket_generator_check_dependencies() {
 	if (!post_type_exists('tc_events') || !post_type_exists('tc_tickets')) {
 		add_action('admin_notices', function () {
