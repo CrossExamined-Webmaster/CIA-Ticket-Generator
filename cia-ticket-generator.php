@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       CIA Ticket Generator
  * Plugin URI:        https://crossexamined.org/
- * Description:       Admin-only tool to bulk-generate Tickera orders/tickets for approved CIA applicants, with a searchable multi-select list and chunked batch processing. Shortcode: [cia_ticket_generator]
- * Version:           1.1.1
+ * Description:       Admin-only tool to bulk-generate Tickera orders/tickets for approved CIA applicants, with a searchable multi-select list and chunked batch processing. Available via the [cia_ticket_generator] shortcode or its own wp-admin sidebar page.
+ * Version:           1.2.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            CrossExamined.org
@@ -62,6 +62,39 @@ function cia_ticket_generator_check_dependencies() {
  * Register shortcode
  */
 add_shortcode('cia_ticket_generator', 'cia_ticket_generator_shortcode');
+
+/**
+ * Register a dedicated wp-admin side menu page that renders the exact same
+ * form as the [cia_ticket_generator] shortcode - so it's usable either as
+ * an embedded shortcode on a page/post, or directly from the WP sidebar
+ * with no page needed.
+ */
+add_action('admin_menu', 'cia_ticket_generator_admin_menu');
+function cia_ticket_generator_admin_menu() {
+	add_menu_page(
+		'CIA Ticket Generator',
+		'CIA Ticket Generator',
+		'manage_options',
+		'cia-ticket-generator',
+		'cia_ticket_generator_admin_page_render',
+		'dashicons-tickets-alt',
+		58
+	);
+}
+
+function cia_ticket_generator_admin_page_render() {
+	if (!current_user_can('manage_options')) {
+		wp_die('You do not have permission to access this page.');
+	}
+
+	echo '<div class="wrap">';
+	echo '<h1 style="margin-bottom:0;">CIA Ticket Generator</h1>';
+	// Reuses the exact same render + processing logic as the shortcode,
+	// so behavior (validation, batch processing, DB sync) is identical
+	// regardless of whether this is loaded via wp-admin or the shortcode.
+	echo cia_ticket_generator_shortcode();
+	echo '</div>';
+}
 
 /**
  * AJAX: Get ticket types for selected event

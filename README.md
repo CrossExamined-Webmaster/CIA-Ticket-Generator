@@ -6,6 +6,8 @@ for approved CIA applicants.
 ## What it does
 
 - Renders a protected shortcode form: `[cia_ticket_generator]`
+- Also available as its own top-level page in the WordPress admin sidebar
+  ("CIA Ticket Generator") - identical form and behavior, no page/post needed
 - Loads selectable applicants from `wp_ce_cia_applications`, filtered to:
   - Non-empty `email`
   - `application_status` in: `Approved`, `Part Fin Aid - Approved`, `Fin Aid - Approved`
@@ -46,6 +48,12 @@ Restricted to logged-in users with the `manage_options` capability.
 3. Place `[cia_ticket_generator]` on any page or post
 
 ## Changelog
+
+### 1.2.0
+- Added a dedicated top-level "CIA Ticket Generator" page in the WordPress
+  admin sidebar (dashicon: tickets-alt), rendering the identical form and
+  processing logic as the `[cia_ticket_generator]` shortcode. Both remain
+  available - use whichever fits your workflow.
 
 ### 1.1.1
 - Fixed a false-positive "Tickera not active" admin notice caused by a hook
